@@ -75,7 +75,7 @@ import streamlit as st
 st.title("Streamlit App with Embedded Gradio")
 st.write("Below is the Gradio app:")
 
-gradio_url = "http://127.0.0.1:7873"  # Replace with your Hugging Face URL
+gradio_url = "http://127.0.0.1"  # Replace with your Hugging Face URL
 st.components.v1.iframe(gradio_url, width=800, height=600)
 
 
