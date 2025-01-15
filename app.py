@@ -70,7 +70,7 @@ def chat(text,history):
 
 app=ChatInterface(fn=chat,theme=gr.themes.Ocean())
 def run_gradio():
-    app.launch(server_name="0.0.0.0", server_port=7860, show_error=True, share=False)
+    app.launch(show_error=True, share=False)
 if "gradio_thread" not in st.session_state:
     st.session_state["gradio_thread"] = Thread(target=run_gradio, daemon=True)
     st.session_state["gradio_thread"].start()
