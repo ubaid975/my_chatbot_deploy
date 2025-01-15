@@ -62,6 +62,5 @@ def chat(text,history):
         return 'your internet issue'
 
 app=ChatInterface(fn=chat,theme=gr.themes.Ocean())
-app.launch(server_name="fcmbikgfcmibp7szw84qnl.streamlit.app/")
-
+app.launch(server_name="0.0.0.0", server_port=7860)
 
