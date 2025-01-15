@@ -1,34 +1,17 @@
+import streamlit as st
 from langchain_groq import ChatGroq
 from langchain.utilities import WikipediaAPIWrapper
 from langchain.tools import WikipediaQueryRun
-from langchain.agents import AgentType, initialize_agent, load_tools
+from langchain.agents import initialize_agent
 from langchain.memory import ConversationBufferMemory
+import os
 from dotenv import load_dotenv
-import streamlit as st
-import os
-from gradio import ChatInterface
-import gradio as gr
-from langchain.agents import AgentType, initialize_agent, load_tools
-from langchain_groq import ChatGroq
-from langchain_core.runnables.history import RunnableWithMessageHistory
-from langchain.agents import AgentExecutor
-from langchain.chains import LLMMathChain
-import time
-import gradio as gr
-import streamlit as st
-from threading import Thread
-import time
 
-
-
-
-import os
-from langchain.utilities import WikipediaAPIWrapper
-from langchain.tools import WikipediaQueryRun
+# Load environment variables
 load_dotenv()
-groq_api=os.getenv("groq")
+groq_api = os.getenv("groq")
 
-
+# Initialize the LangChain components
 chat_groq = ChatGroq(
     model="mixtral-8x7b-32768",
     temperature=0,
@@ -36,47 +19,32 @@ chat_groq = ChatGroq(
     timeout=None,
     max_retries=2,
     api_key=groq_api,
-    # other params...
 )
-os.environ["SERPER_API_KEY"]=os.getenv("serper_api_key")
 
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-api_w=WikipediaAPIWrapper(top_k_results=1)
-wiki=WikipediaQueryRun(api_wrapper=api_w)
+api_wrapper = WikipediaAPIWrapper(top_k_results=1)
+wiki = WikipediaQueryRun(api_wrapper=api_wrapper)
 
+tools = [wiki]
+agent = initialize_agent(tools, llm=chat_groq, memory=memory, agent="conversational-react-description")
 
-tools = load_tools(["google-serper"], llm=chat_groq)
-math_chain = LLMMathChain(llm=chat_groq)
-tool=[wiki,tools,math_chain]
+# Streamlit app
+st.title("Chat with RoboX")
+st.write("Ask me anything!")
 
-agent = initialize_agent(
-    tools, llm=chat_groq,memory=memory,agent="conversational-react-description",
-)
+user_input = st.text_input("Type your message here:")
 
-
-
-def chat(text,history):
-    try:
-        gfg=text 
-        if 'your name' in gfg or 'tumhara name' in gfg or 'tumhara naam' in gfg or 'tumhara nam' in gfg or "tumahara naam" in gfg or 'you name' in gfg:
-            return 'My name is RoboX i am a large language model Developed by Ubaid'
+if st.button("Send"):
+    if user_input:
+        if "your name" in user_input.lower():
+            st.write("My name is RoboX. I am a large language model developed by Ubaid.")
         else:
- 
-            reponese=agent.run(gfg)
-            print(f"Human:{gfg}\nAi:{reponese}")
-            return reponese
-    except Exception as e:
-        return 'your internet issue'
+            try:
+                response = agent.run(user_input)
+                st.write(f"RoboX: {response}")
+            except Exception as e:
+                st.write("There was an issue processing your request.")
 
-app=ChatInterface(fn=chat,theme=gr.themes.Ocean())
-app.launch(share=True,server_port=8080)
-import streamlit as st
-
-st.title("Streamlit App with Embedded Gradio")
-st.write("Below is the Gradio app:")
-
-gradio_url = "http://127.0.0.1:8080"  # Replace with your Hugging Face URL
-st.components.v1.iframe(gradio_url, width=800, height=600)
 
 
 
