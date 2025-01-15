@@ -69,10 +69,14 @@ def chat(text,history):
         return 'your internet issue'
 
 app=ChatInterface(fn=chat,theme=gr.themes.Ocean())
-def run_gradio():
-    app.launch(server_name="0.0.0.0", server_port=7860)
-run_gradio()
-st.components.v1.iframe(src="http://localhost:7860", width=800, height=600)
+app.launch(share=True)
+import streamlit as st
+
+st.title("Streamlit App with Embedded Gradio")
+st.write("Below is the Gradio app:")
+
+gradio_url = "https://your-gradio-app.hf.space"  # Replace with your Hugging Face URL
+st.components.v1.iframe(gradio_url, width=800, height=600)
 
 
 
