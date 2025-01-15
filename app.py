@@ -75,5 +75,5 @@ if "gradio_thread" not in st.session_state:
     st.session_state["gradio_thread"] = Thread(target=run_gradio, daemon=True)
     st.session_state["gradio_thread"].start()
     time.sleep(2)
-st.components.v1.iframe(src="http://localhost:7860", width=800, height=600)
+
 
