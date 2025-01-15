@@ -72,7 +72,7 @@ app=ChatInterface(fn=chat,theme=gr.themes.Ocean())
 def run_gradio():
     app.launch(show_error=True, share=False)
 run_gradio()
-st.components.v1.iframe(src="http://127.0.0.1:7860/", width=800, height=600)
+st.components.v1.iframe(src="http://127.0.0.1:7868", width=800, height=600)
 
 
 
