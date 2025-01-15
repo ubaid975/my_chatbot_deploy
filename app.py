@@ -70,7 +70,7 @@ def chat(text,history):
 
 app=ChatInterface(fn=chat,theme=gr.themes.Ocean())
 def run_gradio():
-    app.launch(show_error=True, share=False)
+    app.launch(show_error=True, share=False,port=7871)
 run_gradio()
 st.components.v1.iframe(src="http://127.0.0.1:7868", width=800, height=600)
 
