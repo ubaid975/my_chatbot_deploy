@@ -12,6 +12,7 @@ from langchain_groq import ChatGroq
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain.agents import AgentExecutor
 from langchain.chains import LLMMathChain
+import time
 
 
 
@@ -62,5 +63,11 @@ def chat(text,history):
         return 'your internet issue'
 
 app=ChatInterface(fn=chat,theme=gr.themes.Ocean())
-app.launch(server_name="0.0.0.0", server_port=7860)
+def run_gradio():
+    app.launch(server_name="0.0.0.0", server_port=7860, show_error=True, share=False)
+if "gradio_thread" not in st.session_state:
+    st.session_state["gradio_thread"] = Thread(target=run_gradio, daemon=True)
+    st.session_state["gradio_thread"].start()
+    time.sleep(2)
+st.components.v1.iframe(src="http://localhost:7860", width=800, height=600)
 
